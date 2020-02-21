@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-python=$1
-prefix=$2
-shift 2
+source ./venv/bin/activate
 
-[[ -z $python ]] && python=python
-[[ -z $prefix ]] && prefix=/usr
+python=python
+prefix=/usr
 
-$python -m pip install --upgrade pip setuptools wheel
+#site=mirors.aliyun.com
+#site_dir=pypi/simple/
+site=pypi.douban.com
+site_dir=simple
+site_override="-i http://${site}/${site_dir} --trusted-host ${site}"
+
+$python -m pip install --upgrade pip setuptools wheel ${site_override}
 
 # Get and build ta-lib
 function install-ta-lib()
@@ -28,14 +32,17 @@ function ta-lib-exists()
 ta-lib-exists || install-ta-lib
 
 # old versions of ta-lib imports numpy in setup.py
-$python -m pip install numpy
+$python -m pip install numpy ${site_override}
+
 
 # Install extra packages
-$python -m pip install ta-lib
+$python -m pip install ta-lib ${site_override}
+
 $python -m pip install https://vnpy-pip.oss-cn-shanghai.aliyuncs.com/colletion/ibapi-9.75.1-py3-none-any.whl
 
 # Install Python Modules
-$python -m pip install -r requirements.txt
+$python -m pip install -r requirements.txt ${site_override}
+
 
 # Install local Chinese language environment
 locale-gen zh_CN.GB18030

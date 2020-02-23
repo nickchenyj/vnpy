@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-python=python
+python=python3
 prefix=/usr
 
 #site=mirors.aliyun.com
 #site_dir=pypi/simple/
-site=pypi.douban.com
-site_dir=simple
-site_override="-i http://${site}/${site_dir} --trusted-host ${site}"
+#site=pypi.douban.com
+#site_dir=simple
+
+site_override=
+if [[ -n $site ]]; then
+    site_override="-i http://${site}/${site_dir} --trusted-host ${site}"
+fi
 
 $python -m pip install --upgrade pip setuptools wheel ${site_override}
 
@@ -46,4 +50,4 @@ $python -m pip install -r requirements.txt ${site_override}
 locale-gen zh_CN.GB18030
 
 # Install vn.py
-$python -m pip install . $@
+# $python -m pip install . $@

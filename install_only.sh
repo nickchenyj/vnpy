@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # Install vn.py
-python -m pip install . $@
+python3 -m pip install . $@
